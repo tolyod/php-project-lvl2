@@ -1,0 +1,42 @@
+{
+    "name": "tolyod/php-project-lvl2",
+    "bin": [
+        "bin/gendiff"
+    ],
+    "description": "Apoloz simple diff generator",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+      {
+        "name": "Anatoliy Poloz",
+        "email": "anatoliy.poloz@gmail.com"
+      }
+    ],
+    "keywords": [
+        "cli",
+        "diff",
+        "simple",
+        "yml",
+        "ini",
+        "json",
+        "hexlet"
+    ],
+    "scripts" : {
+        "phpcs": "phpcs",
+        "phpcbf": "phpcbf"
+    },
+    "autoload": {
+        "files": [
+          "src/Specs.php"
+        ],
+      "psr-4": {
+          "Gendiff\\": "src"
+      }
+    },
+    "require": {
+        "docopt/docopt": "^1.0"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer" : "*"
+    }
+}
