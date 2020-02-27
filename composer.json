@@ -29,7 +29,6 @@
     },
     "autoload": {
         "files": [
-          "src/Specs.php",
           "src/Cli.php",
           "src/Differ.php"
         ],

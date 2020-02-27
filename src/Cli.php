@@ -1,4 +1,5 @@
 <?php
+
 namespace Differ\Cli;
 
 use function Differ\genDiff;
@@ -17,7 +18,7 @@ DOC;
 
 function run()
 {
-    $handler = new \Docopt\Handler;
+    $handler = new \Docopt\Handler();
     $args = $handler->handle(SPEC)->args;
     $pathToFile1 = $args['<firstFile>'];
     $pathToFile2 = $args['<secondFile>'];

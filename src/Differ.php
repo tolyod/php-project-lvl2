@@ -1,5 +1,7 @@
 <?php
+
 namespace Differ;
+
 use function Funct\Collection\union;
 
 function getAbsolutePath($path)
@@ -22,7 +24,7 @@ function genDiff($path1, $path2)
 {
     $filePath1 = getAbsolutePath($path1);
     $filePath2 = getAbsolutePath($path2);
-    $content1= json_decode(file_get_contents($filePath1), true);
+    $content1 = json_decode(file_get_contents($filePath1), true);
     $content2 = json_decode(file_get_contents($filePath2), true);
     $keys = union(array_keys($content1), array_keys($content2));
     $result = array_reduce(
@@ -54,4 +56,3 @@ function genDiff($path1, $path2)
 
     return join("\n", $result) . "\n";
 }
-
