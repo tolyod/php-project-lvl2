@@ -1,1 +1,5 @@
-vendor/
+/vendor/
+logs
+*.swo
+*.swp
+*.cache
