@@ -28,14 +28,8 @@ function getValuesPairByKey($key, $content1, $content2)
     $value2 = getCorrectValue($rawValue2);
     return [$value1, $value2];
 }
-
-function genDiff($path1, $path2)
+function compareFlatAssocArray($keys, $content1, $content2)
 {
-    $filePath1 = getAbsolutePath($path1);
-    $filePath2 = getAbsolutePath($path2);
-    $content1 = json_decode(file_get_contents($filePath1), true);
-    $content2 = json_decode(file_get_contents($filePath2), true);
-    $keys = union(array_keys($content1), array_keys($content2));
     $result = array_reduce(
         array_values($keys),
         function ($acc, $key) use ($content1, $content2) {
@@ -59,6 +53,15 @@ function genDiff($path1, $path2)
         ["{"]
     );
     $result[] = "}";
-
     return join("\n", $result) . "\n";
+}
+
+function genDiff($path1, $path2)
+{
+    $filePath1 = getAbsolutePath($path1);
+    $filePath2 = getAbsolutePath($path2);
+    $content1 = json_decode(file_get_contents($filePath1), true);
+    $content2 = json_decode(file_get_contents($filePath2), true);
+    $keys = union(array_keys($content1), array_keys($content2));
+    return compareFlatAssocArray($keys, $content1, $content2);
 }
