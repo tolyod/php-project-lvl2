@@ -20,6 +20,15 @@ function getCorrectValue($value)
     }
 }
 
+function getValuesPairByKey($key, $content1, $content2)
+{
+    $rawValue1 = $content1[$key] ?? null;
+    $rawValue2 = $content2[$key] ?? null;
+    $value1 = getCorrectValue($rawValue1);
+    $value2 = getCorrectValue($rawValue2);
+    return [$value1, $value2];
+}
+
 function genDiff($path1, $path2)
 {
     $filePath1 = getAbsolutePath($path1);
@@ -30,10 +39,7 @@ function genDiff($path1, $path2)
     $result = array_reduce(
         array_values($keys),
         function ($acc, $key) use ($content1, $content2) {
-            $rawValue1 = $content1[$key] ?? null;
-            $rawValue2 = $content2[$key] ?? null;
-            $value1 = getCorrectValue($rawValue1);
-            $value2 = getCorrectValue($rawValue2);
+            [$value1, $value2] = getValuesPairByKey($key, $content1, $content2);
             $cont1HasKey = array_key_exists($key, $content1);
             $cont2HasKey = array_key_exists($key, $content2);
             $keysExists = $cont1HasKey && $cont2HasKey;
