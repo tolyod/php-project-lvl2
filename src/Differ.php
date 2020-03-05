@@ -3,6 +3,7 @@
 namespace Differ;
 
 use function Funct\Collection\union;
+use function Differ\Parsers\getParsedContent;
 
 function getAbsolutePath($path)
 {
@@ -22,20 +23,21 @@ function getCorrectValue($value)
 
 function getValuesPairByKey($key, $content1, $content2)
 {
-    $rawValue1 = $content1[$key] ?? null;
-    $rawValue2 = $content2[$key] ?? null;
+    $rawValue1 = $content1->$key ?? null;
+    $rawValue2 = $content2->$key ?? null;
     $value1 = getCorrectValue($rawValue1);
     $value2 = getCorrectValue($rawValue2);
     return [$value1, $value2];
 }
+
 function compareFlatAssocArray($keys, $content1, $content2)
 {
     $result = array_reduce(
         array_values($keys),
         function ($acc, $key) use ($content1, $content2) {
             [$value1, $value2] = getValuesPairByKey($key, $content1, $content2);
-            $cont1HasKey = array_key_exists($key, $content1);
-            $cont2HasKey = array_key_exists($key, $content2);
+            $cont1HasKey = property_exists($content1, $key);
+            $cont2HasKey = property_exists($content2, $key);
             $keysExists = $cont1HasKey && $cont2HasKey;
 
             if ($keysExists && $value1 == $value2) {
@@ -60,8 +62,19 @@ function genDiff($path1, $path2)
 {
     $filePath1 = getAbsolutePath($path1);
     $filePath2 = getAbsolutePath($path2);
-    $content1 = json_decode(file_get_contents($filePath1), true);
-    $content2 = json_decode(file_get_contents($filePath2), true);
-    $keys = union(array_keys($content1), array_keys($content2));
+    $extention1 = pathinfo($filePath1, PATHINFO_EXTENSION);
+    $extention2 = pathinfo($filePath2, PATHINFO_EXTENSION);
+    $content1 = getParsedContent(
+        file_get_contents($filePath1),
+        $extention1
+    );
+    $content2 = getParsedContent(
+        file_get_contents($filePath2),
+        $extention2
+    );
+    $keys = union(
+        array_keys(get_object_vars($content1)),
+        array_keys(get_object_vars($content2))
+    );
     return compareFlatAssocArray($keys, $content1, $content2);
 }
