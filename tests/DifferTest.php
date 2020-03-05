@@ -28,6 +28,7 @@ class DifferTest extends TestCase
     {
         return [
             ['flatJsonExpected.out', 'flatJsonBefore.json', 'flatJsonAfter.json'],
+            ['flatYamlExpected.out', 'flatYamlBefore.yaml', 'flatYamlAfter.yaml'],
         ];
     }
 }
