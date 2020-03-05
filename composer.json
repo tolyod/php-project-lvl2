@@ -30,7 +30,8 @@
     "autoload": {
         "files": [
           "src/Cli.php",
-          "src/Differ.php"
+          "src/Differ.php",
+          "src/Parsers.php"
         ],
       "psr-4": {
           "Differ\\": "src"
@@ -38,10 +39,12 @@
     },
     "require": {
         "docopt/docopt": "^1.0",
-        "funct/funct": "^1.5"
+        "funct/funct": "^1.5",
+        "symfony/yaml": "^5.0"
     },
     "require-dev": {
         "squizlabs/php_codesniffer" : "*",
-        "phpunit/phpunit": "^8.5"
+        "phpunit/phpunit": "^8.5",
+        "psy/psysh": "@stable"
     }
 }
