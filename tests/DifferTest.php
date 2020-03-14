@@ -1,7 +1,9 @@
 <?php
+
 namespace Differ\tests;
 
-use \PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\TestCase;
+
 use function Differ\genDiff;
 
 class DifferTest extends TestCase
@@ -29,6 +31,7 @@ class DifferTest extends TestCase
         return [
             ['flatJsonExpected.out', 'flatJsonBefore.json', 'flatJsonAfter.json'],
             ['flatYamlExpected.out', 'flatYamlBefore.yaml', 'flatYamlAfter.yaml'],
+            ['nestedResult.out', 'nestedBefore.json', 'nestedAfter.json']
         ];
     }
 }
