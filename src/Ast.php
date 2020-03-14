@@ -5,69 +5,50 @@ namespace Differ\Ast;
 use function Funct\Collection\union;
 use function Funct\Collection\get;
 
+function actionAdded($firstValue, $secondValue, $name)
+{
+    return [ 'type' => 'added', 'name' => $name, 'value' => $secondValue ];
+}
+
+function actionDeleted($firstValue, $secondValue, $name)
+{
+    return [ 'type' => 'deleted', 'name' => $name, 'value' => $firstValue ];
+}
+
+function actionUnchanged($firstValue, $secondValue, $name)
+{
+    return [ 'type' => 'unchanged', 'name' => $name, 'value' => $firstValue ];
+}
+
+function actionNode($firstValue, $secondValue, $name, $cb)
+{
+    return ['type' => 'node', 'name' => $name, 'children' => $cb($firstValue, $secondValue)];
+}
+
+function actionUpdated($firstValue, $secondValue, $name)
+{
+    return ['type' => 'updated',
+        'name' => $name, 'beforeValue' => $firstValue, 'afterValue' => $secondValue];
+}
+
 function getActions()
 {
     return [
-        [
-            'match' => function ($content1, $content2, $key) {
-                return !property_exists($content1, $key);
-            },
-            'action' => function ($firstValue, $secondValue, $name) {
-                return [
-                    'type' => 'added',
-                    'name' => $name,
-                    'value' => $secondValue
-                ];
-            }
-        ],
-        [
-            'match' => function ($content1, $content2, $key) {
-                return !property_exists($content2, $key);
-            },
-            'action' => function ($firstValue, $secondValue, $name) {
-                return [
-                    'type' => 'deleted',
-                    'name' => $name,
-                    'value' => $firstValue
-                ];
-            }
-        ],
-        [
-            'match' => function ($content1, $content2, $key) {
-                return $content1->$key === $content2->$key;
-            },
-            'action' => function ($firstValue, $secondValue, $name) {
-                return [
-                    'type' => 'unchanged',
-                    'name' => $name,
-                    'value' => $firstValue
-                ];
-            }
-        ],
-        [
-            'match' => function ($content1, $content2, $key) {
-                return is_object($content1->$key) && is_object($content2->$key);
-            },
-            'action' => function ($firstValue, $secondValue, $name, $cb) {
-                return [
-                    'type' => 'node',
-                    'name' => $name,
-                    'children' => $cb($firstValue, $secondValue)
-                ];
-            }
-        ],
-        [
-            'match' => function ($content1, $content2, $key) {
-                return $content1->$key !== $content2->$key;
-            },
-            'action' => function ($firstValue, $secondValue, $name) {
-                return [
-                    'type' => 'updated',
-                    'name' => $name,
-                    'beforeValue' => $firstValue,
-                    'afterValue' => $secondValue
-                ];
-            }
+        [ 'match' => function ($content1, $content2, $key) {
+            return !property_exists($content1, $key);
+        }, 'action' => '\Differ\Ast\actionAdded'],
+        [ 'match' => function ($content1, $content2, $key) {
+            return !property_exists($content2, $key);
+        }, 'action' => '\Differ\Ast\actionDeleted'
+        ], [ 'match' => function ($content1, $content2, $key) {
+            return $content1->$key === $content2->$key;
+        }, 'action' => '\Differ\Ast\actionUnchanged'
+        ], [ 'match' => function ($content1, $content2, $key) {
+            return is_object($content1->$key) && is_object($content2->$key);
+        }, 'action' => '\Differ\Ast\actionNode'
+        ], [ 'match' => function ($content1, $content2, $key) {
+            return $content1->$key !== $content2->$key;
+        }, 'action' => '\Differ\Ast\actionUpdated'
         ]
     ];
 }
@@ -113,12 +94,7 @@ function generateDiffAstTree($content1, $content2)
         [ 'action' => $action ] = getMatchedAction($content1, $content2, $key);
         [$value1, $value2] = getValuesPairByKey($content1, $content2, $key);
 
-        return $action(
-            $value1,
-            $value2,
-            $key,
-            $astGenFunction
-        );
+        return $action($value1, $value2, $key, $astGenFunction);
     },
     $keys);
     return $result;

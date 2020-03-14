@@ -2,29 +2,29 @@
 
 namespace Differ\Renders;
 
+function buildOffsetedJsonFromObject($value, $offset)
+{
+    $lines = explode("\n", json_encode($value, JSON_PRETTY_PRINT));
+    return join(
+        "\n",
+        array_map(
+            function ($inputLine) use ($offset) {
+                $line = preg_replace("/\"/", "", $inputLine);
+                if (trim($line) === "{") {
+                    return $line;
+                }
+                return $offset . $line;
+            },
+            $lines
+        )
+    );
+}
+
 function formatValue($value, $level = 1)
 {
     $offset = makeOffset($level);
     if (is_object($value)) {
-        return join(
-            "\n",
-            array_map(
-                function ($inputLine) use ($offset) {
-                    $line = preg_replace("/\"/", "", $inputLine);
-                    if (trim($line) === "{") {
-                        return $line;
-                    }
-                    return $offset . $line;
-                },
-                explode(
-                    "\n",
-                    json_encode(
-                        $value,
-                        JSON_PRETTY_PRINT
-                    )
-                )
-            )
-        );
+        return buildOffsetedJsonFromObject($value, $offset);
     }
     if (is_bool($value)) {
         return $value ? 'true' : 'false';
@@ -42,49 +42,28 @@ function makeOffset($level)
 
 function getStringBuilders($level)
 {
-    $offset = makeOffset($level);
-    $opOffset = substr($offset, 0, -2);
-     return  [
-         "added" => function ($elem) use ($opOffset, $level) {
-             [
-                 "name" => $name,
-                 "value" => $rawValue
-             ] = $elem;
-             $value = formatValue($rawValue, $level);
-             return "{$opOffset}+ $name: $value";
-         },
-         "deleted" => function ($elem) use ($opOffset, $level) {
-             [
-                 "name" => $name,
-                 "value" => $rawValue
-             ] = $elem;
-             $value = formatValue($rawValue, $level);
-             return "{$opOffset}- $name: $value";
-         },
-         "unchanged" => function ($elem) use ($offset, $level) {
-             [
-                 "name" => $name,
-                 "value" => $rawValue
-             ] = $elem;
-             $value = formatValue($rawValue, $level);
-             return "{$offset}$name: $value";
-         },
-         "node" => function ($elem, $renderFn) use ($offset, $level) {
-             [
-                 "name" => $name,
-                 "children" => $children
-             ] = $elem;
-             $newLevel = $level + 1;
-             return "{$offset}$name: {$renderFn($children, $newLevel)}";
-         },
-         "updated" => function ($elem) use ($opOffset) {
-             [
-                 "name" => $name,
-                 "beforeValue" => $beforeValue,
-                 "afterValue" => $afterValue
-             ] = $elem;
-             return "{$opOffset}+ $name: $afterValue\n{$opOffset}- $name: $beforeValue";
-         }
+    $opOffset = substr(makeOffset($level), 0, -2);
+    return [
+        "added" => function ($elem) use ($opOffset, $level) {
+            [ "name" => $name, "value" => $value ] = $elem;
+            return "{$opOffset}+ $name: " . formatValue($value, $level);
+        },
+        "deleted" => function ($elem) use ($opOffset, $level) {
+            [ "name" => $name, "value" => $value ] = $elem;
+            return "{$opOffset}- $name: " . formatValue($value, $level);
+        },
+        "unchanged" => function ($elem) use ($opOffset, $level) {
+            [ "name" => $name, "value" => $value ] = $elem;
+            return "{$opOffset}  $name: " . formatValue($value, $level);
+        },
+        "node" => function ($elem, $renderFn) use ($opOffset, $level) {
+            [ "name" => $name, "children" => $children ] = $elem;
+            return "{$opOffset}  $name: {$renderFn($children, $level + 1)}";
+        },
+        "updated" => function ($elem) use ($opOffset) {
+            [ "name" => $name, "beforeValue" => $beforeValue, "afterValue" => $afterValue ] = $elem;
+            return "{$opOffset}+ $name: $afterValue\n{$opOffset}- $name: $beforeValue";
+        }
      ];
 }
 
