@@ -31,7 +31,9 @@
         "files": [
           "src/Cli.php",
           "src/Differ.php",
-          "src/Parsers.php"
+          "src/Parsers.php",
+          "src/Ast.php",
+          "src/Render.php"
         ],
       "psr-4": {
           "Differ\\": "src"
