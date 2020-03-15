@@ -32,8 +32,8 @@ class DifferTest extends TestCase
             ['flatJsonExpected.out', 'flatJsonBefore.json', 'flatJsonAfter.json', 'pretty'],
             ['flatYamlExpected.out', 'flatYamlBefore.yaml', 'flatYamlAfter.yaml', 'pretty'],
             ['nestedResult.out', 'nestedBefore.json', 'nestedAfter.json', 'pretty'],
-            ['nestedResultPlain.out', 'nestedBefore.json', 'nestedAfter.json', 'plain']
-
+            ['nestedResultPlain.out', 'nestedBefore.json', 'nestedAfter.json', 'plain'],
+            ['nestedResultJson.out', 'nestedBefore.json', 'nestedAfter.json', 'json']
         ];
     }
 }

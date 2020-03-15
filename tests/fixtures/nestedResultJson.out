@@ -1,0 +1,74 @@
+{
+    "0": {
+        "type": "node",
+        "name": "common",
+        "children": {
+            "0": {
+                "type": "unchanged",
+                "name": "setting1",
+                "value": "Value 1"
+            },
+            "1": {
+                "type": "deleted",
+                "name": "setting2",
+                "value": "200"
+            },
+            "2": {
+                "type": "unchanged",
+                "name": "setting3",
+                "value": true
+            },
+            "3": {
+                "type": "deleted",
+                "name": "setting6",
+                "value": {
+                    "key": "value"
+                }
+            },
+            "6": {
+                "type": "added",
+                "name": "setting4",
+                "value": "blah blah"
+            },
+            "7": {
+                "type": "added",
+                "name": "setting5",
+                "value": {
+                    "key5": "value5"
+                }
+            }
+        }
+    },
+    "1": {
+        "type": "node",
+        "name": "group1",
+        "children": [
+            {
+                "type": "updated",
+                "name": "baz",
+                "beforeValue": "bas",
+                "afterValue": "bars"
+            },
+            {
+                "type": "unchanged",
+                "name": "foo",
+                "value": "bar"
+            }
+        ]
+    },
+    "2": {
+        "type": "deleted",
+        "name": "group2",
+        "value": {
+            "abc": "12345"
+        }
+    },
+    "5": {
+        "type": "added",
+        "name": "group3",
+        "value": {
+            "fee": "100500"
+        }
+    }
+}
+
