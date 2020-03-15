@@ -2,17 +2,16 @@
 
 namespace Differ;
 
-use function Funct\Collection\union;
 use function Differ\Parsers\getParsedContent;
 use function Differ\Ast\generateDiffAstTree;
-use function Differ\Renders\renderAst;
+use function Differ\Render\renderFormatedAst;
 
 function getAbsolutePath($path)
 {
     return $path[0] == '/' ? $path : getcwd() . '/' . $path;
 }
 
-function genDiff($path1, $path2)
+function genDiff($path1, $path2, $format = 'pretty')
 {
     $filePath1 = getAbsolutePath($path1);
     $filePath2 = getAbsolutePath($path2);
@@ -26,10 +25,7 @@ function genDiff($path1, $path2)
         file_get_contents($filePath2),
         $extention2
     );
-    $keys = union(
-        array_keys(get_object_vars($content1)),
-        array_keys(get_object_vars($content2))
-    );
+
     $ast = generateDiffAstTree($content1, $content2);
-    return renderAst($ast) . "\n";
+    return renderFormatedAst($ast, $format) . "\n";
 }

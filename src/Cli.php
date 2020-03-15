@@ -22,6 +22,7 @@ function run()
     $args = $handler->handle(SPEC)->args;
     $pathToFile1 = $args['<firstFile>'];
     $pathToFile2 = $args['<secondFile>'];
-    $diff = genDiff($pathToFile1, $pathToFile2);
+    $format = $args['--format'];
+    $diff = genDiff($pathToFile1, $pathToFile2, $format);
     echo $diff . "\n";
 }
