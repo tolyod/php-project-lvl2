@@ -3,7 +3,6 @@
 namespace Differ\Ast;
 
 use function Funct\Collection\union;
-use function Funct\Collection\get;
 
 function actionAdded($firstValue, $secondValue, $name)
 {
