@@ -12,3 +12,6 @@
 
 ## displaying nested object difference
 [![asciicast](https://asciinema.org/a/szy6olWkc4145bJZWlQIiqWgD.svg)](https://asciinema.org/a/szy6olWkc4145bJZWlQIiqWgD)
+
+## displaying nested object difference in 'plain' format
+[![asciicast](https://asciinema.org/a/VQgmb2oBvU2JN44uYMaRbpPGq.svg)](https://asciinema.org/a/VQgmb2oBvU2JN44uYMaRbpPGq)
