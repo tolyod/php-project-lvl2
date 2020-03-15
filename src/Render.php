@@ -6,7 +6,8 @@ function selectFormatFunction($format)
 {
     $formaters = [
         "pretty" => "Differ\\Formatters\\Pretty\\renderAst",
-        "plain" => "Differ\\Formatters\\Plain\\renderAst"
+        "plain" => "Differ\\Formatters\\Plain\\renderAst",
+        "json" => "Differ\\Formatters\\Json\\renderAst"
     ];
     return $formaters[$format];
 }
