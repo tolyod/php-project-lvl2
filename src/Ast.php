@@ -53,16 +53,19 @@ function getActions()
     ];
 }
 
-function getMatchedAction($first, $second, $key)
+function getMatchedAction($first, $second, $key, $actions)
 {
-    $actions = getActions();
-    foreach ($actions as $actionItem) {
-        $match = $actionItem['match'];
-        if ($match($first, $second, $key)) {
-            return $actionItem;
-        }
+    if (!count($actions)) {
+        throw new Exception('no valid action matched');
     }
-    throw new Exception('no valid action matched');
+
+    $actionItem = array_shift($actions);
+    $match = $actionItem['match'];
+    if ($match($first, $second, $key)) {
+        return $actionItem;
+    }
+
+    return getMatchedAction($first, $second, $key, $actions);
 }
 
 function getCorrectValue($value)
@@ -90,9 +93,10 @@ function generateDiffAstTree($content1, $content2)
         array_keys(get_object_vars($content2))
     );
     $astGenFunction = '\Differ\Ast\generateDiffAstTree';
-    $result = array_map(function ($key) use ($content1, $content2, $astGenFunction) {
-        [ 'action' => $action ] = getMatchedAction($content1, $content2, $key);
-        [$value1, $value2] = getValuesPairByKey($content1, $content2, $key);
+    $actions = getActions();
+    $result = array_map(function ($key) use ($content1, $content2, $astGenFunction, $actions) {
+        [ 'action' => $action ] = getMatchedAction($content1, $content2, $key, $actions);
+        [ $value1, $value2 ] = getValuesPairByKey($content1, $content2, $key);
 
         return $action($value1, $value2, $key, $astGenFunction);
     },
