@@ -33,7 +33,9 @@
           "src/Differ.php",
           "src/Parsers.php",
           "src/Ast.php",
-          "src/Render.php"
+          "src/Render.php",
+          "src/Formatters/Plain.php",
+          "src/Formatters/Pretty.php"
         ],
       "psr-4": {
           "Differ\\": "src"
