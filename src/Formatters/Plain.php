@@ -51,5 +51,5 @@ function renderAst($data, $parentName = "")
         ['type' => $type] = $elem;
         return $stringBuilders[$type]($elem, $selfCallback);
     }, $filtered);
-    return join("\n", $strings);
+    return join(PHP_EOL, $strings);
 }

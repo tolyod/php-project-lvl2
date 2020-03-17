@@ -86,5 +86,5 @@ function renderAst($data, $level = 1)
     );
     array_unshift($strings, $firstLine);
     array_push($strings, $lastLine);
-    return join("\n", $strings);
+    return join(PHP_EOL, $strings);
 }

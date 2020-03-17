@@ -15,5 +15,5 @@ function selectFormatFunction($format)
 function renderFormatedAst($ast, $format)
 {
     $formatFunction = selectFormatFunction($format);
-    return $formatFunction($ast);
+    return $formatFunction($ast) . PHP_EOL;
 }
