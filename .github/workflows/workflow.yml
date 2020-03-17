@@ -14,7 +14,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v1
         with:
-          php-version: '7.3'
+          php-version: '7.4'
       - name: Install
         run: make install
       - name: Run linter
@@ -26,4 +26,4 @@ jobs:
         with:
           coverageCommand: make test
           debug: true
-        
+

@@ -5,6 +5,11 @@
     ],
     "description": "Apoloz simple diff generator",
     "type": "project",
+    "config": {
+      "platform": {
+        "php" : "7.4"
+      }
+    },
     "license": "MIT",
     "authors": [
       {
