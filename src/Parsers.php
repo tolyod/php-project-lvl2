@@ -4,16 +4,16 @@ namespace Differ\Parsers;
 
 use Symfony\Component\Yaml\Yaml;
 
-function getParsedContent($fileContent, $fileExtention)
+function getParsedContent($data, $extention)
 {
-    switch ($fileExtention) {
+    switch ($extention) {
         case 'json':
-            return json_decode($fileContent);
+            return json_decode($data);
             break;
         case 'yaml':
-            return Yaml::parse($fileContent, Yaml::PARSE_OBJECT_FOR_MAP);
+            return Yaml::parse($data, Yaml::PARSE_OBJECT_FOR_MAP);
             break;
         default:
-            throw new Exception('no parser for extention ' . $fileExtention);
+            throw new Exception('no parser for extention ' . $data);
     }
 }
