@@ -31,19 +31,19 @@ function getActions()
     ];
 }
 
-function getMatchedAction($first, $second, $key, $actions)
+function getMatchedAction($first, $second, $key, $actions, $actionIndex = 0)
 {
-    if (!count($actions)) {
+    if (count($actions) < ($actionIndex + 1) ) {
         throw new Exception('no valid action matched');
     }
 
-    $actionItem = array_shift($actions);
+    $actionItem = $actions[$actionIndex];
     $match = $actionItem['match'];
     if ($match($first, $second, $key)) {
         return $actionItem;
     }
 
-    return getMatchedAction($first, $second, $key, $actions);
+    return getMatchedAction($first, $second, $key, $actions, $actionIndex + 1);
 }
 
 function getCorrectValue($value)
