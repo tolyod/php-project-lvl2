@@ -33,7 +33,8 @@ function getActions()
 
 function getMatchedAction($first, $second, $key, $actions, $actionIndex = 0)
 {
-    if (count($actions) < ($actionIndex + 1) ) {
+    $isActionsOut = count($actions) < ($actionIndex + 1);
+    if ($isActionsOut) {
         throw new Exception('no valid action matched');
     }
 
@@ -46,22 +47,9 @@ function getMatchedAction($first, $second, $key, $actions, $actionIndex = 0)
     return getMatchedAction($first, $second, $key, $actions, $actionIndex + 1);
 }
 
-function getCorrectValue($value)
+function getValueByKey($content, $key)
 {
-    if (is_null($value)) {
-        return 'null';
-    } else {
-        return $value;
-    }
-}
-
-function getValuesPairByKey($content1, $content2, $key)
-{
-    $rawValue1 = $content1->$key ?? null;
-    $rawValue2 = $content2->$key ?? null;
-    $value1 = getCorrectValue($rawValue1);
-    $value2 = getCorrectValue($rawValue2);
-    return [$value1, $value2];
+    return $content->$key ?? null;
 }
 
 function generateDiff($content1, $content2)
@@ -74,7 +62,8 @@ function generateDiff($content1, $content2)
     $actions = getActions();
     $result = array_map(function ($key) use ($content1, $content2, $astGenFunction, $actions) {
         [ 'action' => $action ] = getMatchedAction($content1, $content2, $key, $actions);
-        [ $value1, $value2 ] = getValuesPairByKey($content1, $content2, $key);
+        $value1 = getValueByKey($content1, $key);
+        $value2 = getValueByKey($content2, $key);
 
         return $action($value1, $value2, $key, $astGenFunction);
     },
