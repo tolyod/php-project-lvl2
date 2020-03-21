@@ -42,9 +42,7 @@ function getStringBuilders($parentName)
 function renderAst($data, $parentName = "")
 {
     $selfCallback = __FUNCTION__;
-    $filtered = array_filter($data, function ($elem) {
-        return $elem['type'] !== 'unchanged';
-    });
+    $filtered = array_filter($data, fn ($elem) => $elem['type'] !== 'unchanged');
     $stringBuilders = getStringBuilders($parentName);
 
     $strings = array_map(function ($elem) use ($stringBuilders, $selfCallback) {
