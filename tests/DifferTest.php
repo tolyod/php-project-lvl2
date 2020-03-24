@@ -11,8 +11,11 @@ class DifferTest extends TestCase
     /**
     * @dataProvider additionProvider
     */
-    public function testGenDiff($expectedFileName, $testFileName1, $testFileName2, $format)
+    public function testGenDiff($type, $format)
     {
+        $expectedFileName = $type . "_expected_" . $format . ".out";
+        $testFileName1 = "before." . $type;
+        $testFileName2 = "after." . $type;
         $expectedFilePath = $this->getFilePath($expectedFileName);
         $testFilePath1 = $this->getFilePath($testFileName1);
         $testFilePath2 = $this->getFilePath($testFileName2);
@@ -29,11 +32,12 @@ class DifferTest extends TestCase
     public function additionProvider()
     {
         return [
-            ['flatJsonExpected.out', 'flatJsonBefore.json', 'flatJsonAfter.json', 'pretty'],
-            ['flatYamlExpected.out', 'flatYamlBefore.yaml', 'flatYamlAfter.yaml', 'pretty'],
-            ['nestedResult.out', 'nestedBefore.json', 'nestedAfter.json', 'pretty'],
-            ['nestedResultPlain.out', 'nestedBefore.json', 'nestedAfter.json', 'plain'],
-            ['nestedResultJson.out', 'nestedBefore.json', 'nestedAfter.json', 'json']
+            ['json', 'pretty'],
+            ['yaml', 'pretty'],
+            ['json', 'plain'],
+            ['yaml', 'plain'],
+            ['json', 'json'],
+            ['yaml', 'json']
         ];
     }
 }
