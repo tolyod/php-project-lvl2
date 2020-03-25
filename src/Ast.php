@@ -2,6 +2,8 @@
 
 namespace Differ\Ast;
 
+use tightenco\collect;
+
 use function Funct\Collection\union;
 
 function getActions()
@@ -31,20 +33,11 @@ function getActions()
     ];
 }
 
-function getMatchedAction($first, $second, $key, $actions, $actionIndex = 0)
+function getMatchedAction($first, $second, $key, $actions)
 {
-    $isActionsOut = count($actions) < ($actionIndex + 1);
-    if ($isActionsOut) {
-        throw new Exception('no valid action matched');
-    }
-
-    $actionItem = $actions[$actionIndex];
-    $match = $actionItem['match'];
-    if ($match($first, $second, $key)) {
-        return $actionItem;
-    }
-
-    return getMatchedAction($first, $second, $key, $actions, $actionIndex + 1);
+    $matchedAction = collect($actions)
+        ->first(fn($action) => $action['match']($first, $second, $key));
+    return $matchedAction['action'];
 }
 
 function getValueByKey($content, $key)
@@ -61,7 +54,7 @@ function generateDiff($content1, $content2)
     $astGenFunction = '\Differ\Ast\generateDiff';
     $actions = getActions();
     $result = array_map(function ($key) use ($content1, $content2, $astGenFunction, $actions) {
-        [ 'action' => $action ] = getMatchedAction($content1, $content2, $key, $actions);
+        $action = getMatchedAction($content1, $content2, $key, $actions);
         $value1 = getValueByKey($content1, $key);
         $value2 = getValueByKey($content2, $key);
 
