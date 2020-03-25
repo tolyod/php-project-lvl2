@@ -13,14 +13,14 @@ function buildOffsetedJsonFromObject($value, $offset)
                 if (trim($line) === "{") {
                     return $line;
                 }
-                return $offset . $line;
+                return $offset . '    ' . $line;
             },
             $lines
         )
     );
 }
 
-function formatValue($value, $level = 1)
+function formatValue($value, $level)
 {
     $offset = makeOffset($level);
     if (is_object($value)) {
@@ -37,12 +37,20 @@ function formatValue($value, $level = 1)
 
 function makeOffset($level)
 {
-    return str_repeat('    ', $level);
+    $padding = '    ';
+    return str_repeat($padding, $level);
+}
+
+function makeOpOffset($level)
+{
+    $padding = '    ';
+    $opPaddingPrefix = '  ';
+    return $opPaddingPrefix . str_repeat($padding, $level);
 }
 
 function getStringBuilders($level)
 {
-    $opOffset = substr(makeOffset($level), 0, -2);
+    $opOffset = makeOpOffset($level);
     return [
         "added" => function ($elem) use ($opOffset, $level) {
             [ "name" => $name, "value" => $value ] = $elem;
@@ -67,11 +75,11 @@ function getStringBuilders($level)
      ];
 }
 
-function renderAst($data, $level = 1)
+function renderAst($data, $level = 0)
 {
     $selfCallback = __FUNCTION__;
     $stringBuilders = getStringBuilders($level);
-    $curOffset = makeOffset($level - 1);
+    $curOffset = makeOffset($level);
     $firstLine = "{";
     $lastLine = "$curOffset}";
     $strings =  array_map(
@@ -85,5 +93,5 @@ function renderAst($data, $level = 1)
         $data
     );
 
-    return join(PHP_EOL, [$firstLine, ...$strings, $lastLine]);
+    return join("\n", [$firstLine, ...$strings, $lastLine]);
 }
