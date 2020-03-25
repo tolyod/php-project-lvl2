@@ -13,7 +13,7 @@ function buildOffsetedJsonFromObject($value, $offset)
                 if (trim($line) === "{") {
                     return $line;
                 }
-                return $offset . '    ' . $line;
+                return $offset . $line;
             },
             $lines
         )
@@ -22,8 +22,8 @@ function buildOffsetedJsonFromObject($value, $offset)
 
 function formatValue($value, $level)
 {
-    $offset = makeOffset($level);
     if (is_object($value)) {
+        $offset = makeOffset($level + 1);
         return buildOffsetedJsonFromObject($value, $offset);
     }
     if (is_bool($value)) {
