@@ -10,7 +10,7 @@
         "php" : "7.4"
       }
     },
-    "license": "MIT",
+    "license": "BSD",
     "authors": [
       {
         "name": "Anatoliy Poloz",
